@@ -1,14 +1,14 @@
-import { useState } from "react";
-import "./App.css";
-import { useHome } from "./hooks/home/useHome";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Home } from "./pages/Home";
 
 function App() {
-  const { actions, state } = useHome();
-  const { activities } = state;
+  const queryClient = new QueryClient();
 
-  console.log(activities);
-
-  return <></>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Home />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
