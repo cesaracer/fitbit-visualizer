@@ -8,6 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   Avatar,
   Card,
+  CircularProgress,
   Container,
   Divider,
   LinearProgress,
@@ -29,7 +30,7 @@ import { FitbitActivitySingle, ImageMap } from "../../types/types";
 function Home() {
   const { actions, state } = useHome();
   const { searchByDate } = actions;
-  const { activities, dateData } = state;
+  const { activities, dateData, isLoading } = state;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -118,6 +119,20 @@ function Home() {
           <Typography style={{ padding: 15 }} variant="h4">
             Recent Workout Trends
           </Typography>
+          {isLoading && !activities && (
+            <div
+              style={{
+                height: 400,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography>Fetching Data...</Typography>
+              <CircularProgress />
+            </div>
+          )}
           {activities && (
             <PieChart
               height={400}
