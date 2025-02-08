@@ -12,6 +12,7 @@ function useHome() {
   const [activityData, setActivityData] = useState<FitbitChartItem[] | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function handleDataParse(data: FitbitActivity[]) {
     const fitbitData = data;
@@ -49,6 +50,7 @@ function useHome() {
   }
 
   const handleRetrieveData = useCallback(async () => {
+    setIsLoading(true);
     let data = [];
     let res = await axios.get(
       `${import.meta.env.VITE_API_BASE_URI}/activity/`,
@@ -84,6 +86,7 @@ function useHome() {
     }
 
     handleDataParse(data);
+    setIsLoading(false);
   }, []);
 
   const dateMutation = useMutation({
@@ -136,6 +139,7 @@ function useHome() {
     state: {
       activities: activityData,
       dateData: dateMutation,
+      isLoading,
     },
   };
 }
