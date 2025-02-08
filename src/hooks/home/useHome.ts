@@ -1,16 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import {
+  CalendarItem,
+  FitbitActivity,
+  FitbitActivitySingle,
+  FitbitChartItem,
+} from "../../types/types";
 
 function useHome() {
-  const [activityData, setActivityData] = useState(null);
+  const [activityData, setActivityData] = useState<FitbitChartItem[] | null>(
+    null
+  );
 
-  function handleDataParse(data) {
+  function handleDataParse(data: FitbitActivity[]) {
     const fitbitData = data;
 
-    const durationData = [];
+    const durationData: FitbitChartItem[] = [];
 
-    fitbitData?.forEach((fitbitDataItem) => {
+    fitbitData?.forEach((fitbitDataItem: FitbitActivity) => {
       const activityName = fitbitDataItem.activityName;
       const duration = Math.trunc(fitbitDataItem.duration / 1000 / 60);
       const id = durationData.length;
@@ -80,7 +88,7 @@ function useHome() {
 
   const dateMutation = useMutation({
     mutationKey: ["fitbit-date-data"],
-    mutationFn: async (date) => {
+    mutationFn: async (date: CalendarItem) => {
       const month = date.$M + 1 < 10 ? `0${date.$M + 1}` : `${date.$M + 1}`;
       const day = date.$D < 10 ? `0${date.$D}` : `${date.$D}`;
       const dateStr = `${date.$y}-${month}-${day}`;
@@ -95,7 +103,10 @@ function useHome() {
       );
 
       const activityList = res.data.activities;
-      activityList.sort((a, b) => b.duration - a.duration);
+      activityList.sort(
+        (a: FitbitActivitySingle, b: FitbitActivitySingle) =>
+          b.duration - a.duration
+      );
 
       return activityList;
     },

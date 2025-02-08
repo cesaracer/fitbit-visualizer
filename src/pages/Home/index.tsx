@@ -24,6 +24,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { FitbitActivitySingle, ImageMap } from "../../types/types";
 
 function Home() {
   const { actions, state } = useHome();
@@ -67,9 +68,10 @@ function Home() {
                 </Typography>
                 <List>
                   {dateData.isSuccess &&
-                    dateData.data.map((dateItem) => {
-                      const imgSrc = image_map[dateItem.activityParentName]
-                        ? image_map[dateItem.activityParentName]
+                    dateData.data.map((dateItem: FitbitActivitySingle) => {
+                      const imgKey: string = dateItem.activityParentName;
+                      const imgSrc: string = image_map[imgKey as keyof ImageMap]
+                        ? image_map[imgKey as keyof ImageMap]
                         : image_map.other;
 
                       return (
