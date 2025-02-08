@@ -4,17 +4,18 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 function useHome() {
   const [activityData, setActivityData] = useState(null);
+  const [dateActivity, setDateActivity] = useState(null);
+
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
   function handleDataParse(data) {
-    console.log(data);
     const fitbitData = data;
 
     const durationData = [];
 
     fitbitData?.forEach((fitbitDataItem) => {
       const activityName = fitbitDataItem.activityName;
-      const duration = fitbitDataItem.duration / 1000 / 60;
+      const duration = Math.trunc(fitbitDataItem.duration / 1000 / 60);
       const id = durationData.length;
 
       const activityIndex = durationData.findIndex(
@@ -29,6 +30,8 @@ function useHome() {
         durationData.push(activityItem);
       }
     });
+
+    durationData.sort((a, b) => b.value - a.value);
 
     setActivityData(durationData);
   }
@@ -78,8 +81,6 @@ function useHome() {
       const day = date.$D < 10 ? `0${date.$D}` : `${date.$D}`;
       const dateStr = `${date.$y}-${month}-${day}`;
 
-      console.log(dateStr);
-
       const res = await axios.get(
         `${import.meta.env.VITE_API_BASE_URI}/date?date=${dateStr}`,
         {
@@ -89,7 +90,10 @@ function useHome() {
         }
       );
 
-      return res.data.activities;
+      const activityList = res.data.activities;
+      activityList.sort((a, b) => b.duration - a.duration);
+
+      return activityList;
     },
   });
 
@@ -127,6 +131,7 @@ function useHome() {
     state: {
       activities: activityData,
       isModalActive,
+      dateData: dateMutation,
     },
   };
 }
