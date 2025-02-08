@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 function useHome() {
   const [activityData, setActivityData] = useState(null);
-  const [dateActivity, setDateActivity] = useState(null);
-
-  const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
   function handleDataParse(data) {
     const fitbitData = data;
@@ -24,9 +21,16 @@ function useHome() {
       if (activityIndex !== -1) {
         const activityItem = durationData[activityIndex];
         activityItem.value = activityItem.value + duration;
+        activityItem.frequency = activityItem.frequency + 1;
+
         durationData[activityIndex] = activityItem;
       } else {
-        const activityItem = { id, value: duration, label: activityName };
+        const activityItem = {
+          id,
+          value: duration,
+          label: activityName,
+          frequency: 1,
+        };
         durationData.push(activityItem);
       }
     });
@@ -109,28 +113,17 @@ function useHome() {
     );
   }
 
-  function viewDetails() {
-    //
-  }
-
-  function toggleModal() {
-    //
-  }
-
   useEffect(() => {
     handleRetrieveData();
   }, []);
 
   return {
     actions: {
-      toggleModal,
-      viewDetails,
       searchByDate: dateMutation.mutate,
       isSearchPending: dateMutation.isPending,
     },
     state: {
       activities: activityData,
-      isModalActive,
       dateData: dateMutation,
     },
   };
