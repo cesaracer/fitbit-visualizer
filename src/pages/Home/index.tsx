@@ -1,7 +1,17 @@
 import { PieChart } from "@mui/x-charts";
 import { useHome } from "../../hooks/home/useHome";
 import logo from "/src/assets/github-mark.png";
-import { image_map } from "../../constants/image-map";
+import Core from "/src/assets/abs.gif";
+import Spinning from "/src/assets/bike.gif";
+import Treadmill from "/src/assets/treadmill.gif";
+import Weights from "/src/assets/weight.gif";
+import other from "/src/assets/weight.gif";
+import Walk from "/src/assets/walk.gif";
+import Row from "/src/assets/row.png";
+import Stairclimber from "/src/assets/stairs.gif";
+import Strength from "/src/assets/muscle.gif";
+import Weightlifting from "/src/assets/weightlifting.gif";
+import Elliptical from "/src/assets/eliptical.png";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -26,6 +36,20 @@ import {
   Typography,
 } from "@mui/material";
 import { FitbitActivitySingle, ImageMap } from "../../types/types";
+
+const image_map = {
+  Treadmill,
+  Walk,
+  "Strength training": Strength,
+  Stairclimber,
+  Weights,
+  Weightlifting,
+  "Core training": Core,
+  "Rowing machine": Row,
+  Spinning,
+  Elliptical,
+  other,
+};
 
 function Home() {
   const { actions, state } = useHome();
